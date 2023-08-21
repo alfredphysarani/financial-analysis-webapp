@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Data Analysis Tool</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="script.js"></script>
+</head>
+
+<body>
+  <div id="header">
+    <h1>&#128200; Business Data Analysis Tool</h1>
+    <p>The tool supports the following functions:</p>
+    <ul id="function-list">
+      <li>Data input of weekly or monthly sales, revenue and expenses</li>
+      <li>Display of data in table</li>
+      <li><span class="chart-name">Scatter Plot</span> of sales, revenue and expenses</li>
+      <li><span class="chart-name">Bar Chart</span> of the data</li>
+      <li><span class="chart-name">Time Series Line Chart</span> of the data</li>
+    </ul>
+    <hr/>
+  </div>
+
+  <div id="input-slot" class="slot">
+    <h2>Data Input</h2>
+    <form id="data-form">
+      <label for="week-input">Number of week: </label>
+      <input type="week" id="week-input" class="timepicker"/>
+
+      <label for="month-input">Number of month: </label>
+      <input type="month" id="month-input" class="timepicker"/>
+
+      <label for="revenue-input">Revenue (USD): </label>
+      <input type="number" id="revenue-input" name="revenue" step="1"/>
+
+      <label for="sales-input">Sales (USD): </label>
+      <input type="number" id="sales-input" name="sales" step="1" />
+
+      <label for="expenses-input">Expenses (USD): </label>
+      <input type="number" id="expenses-input" name="expenses" min="0" step="1" />
+
+      <button type="submit">Analyze</button>
+    </form>
+    
+  </div>
+    
+    <div id="charts"></div>
+  </div>
+</body>
+</html>
