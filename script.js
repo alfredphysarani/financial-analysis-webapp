@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('log').innerHTML = '';
     
     analyzeButton.addEventListener('click', (event) => {
+        event.preventDefault();
         const file = fileInput.files[0];
         if (file) {
             const reader = new FileReader();
@@ -191,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             reader.readAsArrayBuffer(file);
         }
-        event.preventDefault();
+        
     });
     
 });
