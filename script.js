@@ -156,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const reader = new FileReader();
 
             reader.onload = (event) => {
+                event.preventDefault();
                 const excelData = event.target.result;
                 const parsedData = parseExcelData(excelData);
 
