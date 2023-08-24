@@ -47,7 +47,7 @@ const createChart = (chartType, xlabel, datasetLabels, datasets) => {
     const ctx = canvas.getContext('2d');
 
     const chartData = {
-        labels: `${xlabel}`,
+        labels: xlabel,
         datasets: datasets.map((data, index) => ({
             label: datasetLabels[index],
             data: data,
@@ -147,8 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('file-input');
     const chartsContainer = document.getElementById('charts');
     const correlationContainer = document.getElementById('correlation');
+    document.getElementById('log').innerHTML = '';
     
-    analyzeButton.addEventListener('click', () => {
+    analyzeButton.addEventListener('click', (event) => {
         const file = fileInput.files[0];
         if (file) {
             const reader = new FileReader();
@@ -180,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
 
                 // Create charts
-                createChart('line',[months], ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
+                createChart('line', months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
                 createBarChart(months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
 
                 // Perform and display correlation analysis
@@ -190,5 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             reader.readAsArrayBuffer(file);
         }
+        event.preventDefault();
     });
+    
 });
