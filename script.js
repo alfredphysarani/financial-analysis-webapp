@@ -20,7 +20,7 @@ const parseExcelData = (excelData) => {
     const expensesData = [];
 
     data.forEach((row) => {
-        months.push(row.month.toLowerCase());// Convert to lowercase for consistent comparison
+        months.push(row.month);
         salesData.push(row.sales);
         revenueData.push(row.revenue);
         expensesData.push(row.expenses);
