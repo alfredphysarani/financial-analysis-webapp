@@ -19,7 +19,7 @@ const parseExcelData = (excelData) => {
     const revenueData = [];
     const expensesData = [];
 
-    data.forEach((row) => {
+    data.forEach((row) => { //month,sales,revenue,expenses need to be exactly the same as the header in excel
         months.push(row.month);
         salesData.push(row.sales);
         revenueData.push(row.revenue);
@@ -141,6 +141,59 @@ const createBarChart = (xLabels, datasetLabels, datasets) => {
     });
 };
 
+// Higher-order function for creating scatter plots
+const createScatterPlot = (label, xData, yData,relation) => {
+    const chartsContainer = document.getElementById(relation);
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 300;
+    chartsContainer.innerHTML = '';
+    chartsContainer.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+
+    const chartData = {
+        datasets: [{
+            label: label,
+            data: xData.map((x, index) => ({ x: x, y: yData[index] })),
+            backgroundColor: getRandomColor(),
+            borderColor: 'rgba(0, 0, 0, 0.2)',
+            borderWidth: 1,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            showLine: false
+        }]
+    };
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: 'Value'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Value'
+                }
+            }
+        }
+    };
+
+    new Chart(ctx, {
+        type: 'scatter',
+        data: chartData,
+        options: chartOptions
+    });
+};
+
+
 // Event listener for input
 document.addEventListener('DOMContentLoaded', () => {
     const analyzeButton = document.getElementById('analyze-button');
@@ -185,6 +238,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Create charts
                 createChart('line', months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
                 createBarChart(months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
+                createScatterPlot('Sales vs Revenue', parsedData.sales, parsedData.revenue,'scatter_charts_1');
+                createScatterPlot('Expenses vs Revenue', parsedData.expenses, parsedData.revenue,'scatter_charts_2');
+                createScatterPlot('Sales vs Expenses', parsedData.sales, parsedData.expenses,'scatter_charts_3');
 
                 // Perform and display correlation analysis
                 const correlationCoefficient = calculateCorrelation(salesData, revenueData);
