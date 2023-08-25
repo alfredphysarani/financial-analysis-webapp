@@ -278,13 +278,20 @@ const correlationAnalysis = (xData, yData) => {
     return correlation;
 }
 
+const trendString = (slope) => {
+    const output = slope > 0 ? 'is trending up' :
+    slope < 0 ? 'is trending down.' :
+    'has no trend.'
+
+    return output;
+}
+
 
 // Event listener for input
 document.addEventListener('DOMContentLoaded', () => {
     const analyzeButton = document.getElementById('analyze-button');
     const fileInput = document.getElementById('file-input');
     const chartsContainer = document.getElementById('charts');
-    const correlationContainer = document.getElementById('correlation-data');
     
     analyzeButton.addEventListener('click', (event) => {
         event.preventDefault();
@@ -305,7 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Display analysis results
                 chartsContainer.innerHTML = '';
-                correlationContainer.innerHTML = '';
                 // Display analysis results for testing returned array of object
                 const parsedDataContainer = document.getElementById('testing');
                 parsedDataContainer.innerHTML = `
@@ -315,15 +321,39 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>Expenses: ${parsedData.expenses}</p>
                 `;
 
-                // Create charts
+                // Create Line charts
                 createLineChart('line', months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
-                createScatterRegressPlot('Time Unit', 'Sales', months, salesData, 'regress-chart-sales')
-                createScatterRegressPlot('Time Unit', 'Revenue', months, revenueData, 'regress-chart-revenue')
-                createScatterRegressPlot('Time Unit', 'Expenses', months, expensesData, 'regress-chart-expenses')
+
+                // Regression Analysis on Sales
+                createScatterRegressPlot('Time Unit', 'Sales', months, salesData, 'regress-chart-sales');
+                const regressSales = timeRegressionAnalysis(months, salesData);
+                document.getElementById('regress-result-sales').innerHTML += `The linear regression equation of sales: ${regressSales[0]}x + ${regressSales[1]}.`;
+                document.getElementById('regress-result-sales').innerHTML += `<br\>The sales ${trendString(regressSales[0])}`;
+                
+                // Regression Analysis on Revenue
+                createScatterRegressPlot('Time Unit', 'Revenue', months, revenueData, 'regress-chart-revenue');
+                const regressRevenue = timeRegressionAnalysis(months, revenueData);
+                document.getElementById('regress-result-revenue').innerHTML = `The linear regression equation of revenue: ${regressRevenue[0]}x + ${regressRevenue[1]}`;
+                document.getElementById('regress-result-revenue').innerHTML += `<br\>The revenue ${trendString(regressRevenue[0])}`;
+
+                // Regression Analysis on Expenses
+                createScatterRegressPlot('Time Unit', 'Expenses', months, expensesData, 'regress-chart-expenses');
+                const regressExpenses = timeRegressionAnalysis(months, expensesData);
+                document.getElementById('regress-result-expenses').innerHTML = `The linear regression equation of expenses: ${regressExpenses[0]}x + ${regressExpenses[1]}`;
+                document.getElementById('regress-result-expenses').innerHTML += `<br\>The revenue ${trendString(regressExpenses[0])}`;
+
+                // Create Bar Chart
                 createBarChart(months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
-                createScatterPlot('Sales', 'Revenue', parsedData.sales, parsedData.revenue,'scatter_svr');
-                createScatterPlot('Expenses', 'Revenue', parsedData.expenses, parsedData.revenue,'scatter_evr');
-                createScatterPlot('Sales', 'Expenses', parsedData.sales, parsedData.expenses,'scatter_sve');
+
+                // Create Scatter Plot
+                createScatterPlot('Sales', 'Revenue', salesData, revenueData,'scatter-svr');
+                document.getElementById('correlation-svr').innerHTML = `The correlation betweel Sales and Revenue: ${correlationAnalysis(salesData, revenueData)}`;
+
+                createScatterPlot('Expenses', 'Revenue', expensesData, revenueData,'scatter-evr');
+                document.getElementById('correlation-evr').innerHTML = `The correlation betweel Sales and Revenue: ${correlationAnalysis(expensesData, revenueData)}`;
+
+                createScatterPlot('Sales', 'Expenses', salesData, expensesData,'scatter-sve');
+                document.getElementById('correlation-sve').innerHTML = `The correlation betweel Sales and Revenue: ${correlationAnalysis(salesData, expensesData)}`;
             };
 
             reader.readAsArrayBuffer(file);
