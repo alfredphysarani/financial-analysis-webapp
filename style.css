@@ -1,8 +1,9 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+    padding: 15px;
+    background-color: white;
+    color: black;
   }
   
   #input-slot {
@@ -30,7 +31,7 @@ body {
   }
   
   button {
-    background-color: #007bff;
+    background-color: #183D3D;
     color: #fff;
     border: none;
     padding: 10px;
@@ -38,6 +39,37 @@ body {
   }
   
   button:hover {
-    background-color: #0056b3;
+    background-color: #5C8374;
   }
-  
+
+  div{
+    padding: 10px;
+  }
+
+  hr {
+    clear: both;
+  }
+
+  #intro-guide {
+    float: left;
+    width: 48%;
+    background-color: #176B87;
+    border-radius: 15px;
+
+  }
+
+  #intro-function {
+    float: right;
+    width: 48%;
+    background-color: #64CCC5;
+    border-radius: 15px;
+  }
+
+  #upload-section {
+    clear: both;
+  }
+
+  canvas {
+    width: 90%;
+    height: 30vw;
+  }

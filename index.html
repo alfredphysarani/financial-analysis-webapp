@@ -13,27 +13,65 @@
         <h1>Business Data Analysis Tool</h1>
     </header>
     <main>
+        <div id="intro">
+            <div id="intro-guide">
+                <h2>User Guide</h2>
+                <ul>
+                    <li>The tool only supports .xlsx format file.</li>
+                    <li>
+                        The standard format of the Excel file consists of 4 columns
+                        <ol>
+                            <li>month</li>
+                            <li>sales</li>
+                            <li>revenue</li>
+                            <li>expenses</li>
+                        </ol>
+                    </li>
+                    <li>Please download the template Excel file <a href="sample.xlsx" download="sample.xlsx">here</a></li>
+                </ul>
+            </div>
+            <div id="intro-function">
+                <h2>Tool Function</h2>
+                <ul>
+                    <li>Generate line charts of sales, revenue and expenses with regression trendline</li>
+                    <li>Generate bar charts of sales, revenue and expenses</li>
+                    <li>Generate scatter plots of sales, revenue and expenses with correlation data</li>
+                </ul>
+            </div>
+        </div>
+
         <form id="upload-section">
             <h2>Upload Excel File</h2>
             <input type="file" id="file-input" accept=".xlsx" required>
             <button id="analyze-button">Analyze</button>
         </form>
-        <section id="analysis-section">
-            <h2>Data Analysis</h2>
-            <div id="charts">Chart container placeholder</div>
-            <div id="bar_charts">Bar chart container placeholder</div>
-            <div id="scatter_charts_1">Scatter plot 1 container</div>
-            <div id="scatter_charts_2">Scatter plot 2 container</div>
-            <div id="scatter_charts_3">Scatter plot 3 container</div>
-            <div id="correlation">Correlation container</div>
+        <hr/>
+        <section id="analysis-section" hidden>
+            <h2 id="analysis-title" class="title">Data Analysis</h2>
+            <h3 id="line-charts-title" class="title">Line Chart of Sales, Revenue & Expenses</h3>
+            <div id="charts" classs="chart"></div>
+            <hr/>
+            <h3 id="line-regress-title" class="title">Regression Analysis of Time Series</h3>
+            <div id="regress-chart-sales" class="chart"></div>
+            <div id="regress-chart-revenue" classs="chart"></div>
+            <div id="regress-chart-expenses" classs="chart"></div>
+            <hr/>
+            <h3 id="bar-charts-title" class="title">Bar Chart of Sales, Revenue & Expenses</h3>
+            <div id="bar_charts"></div>
+            <hr/>
+            <h3 id="scatter-charts-title" class="title">Scatter plot of Sales, Revenue & Expenses</h3>
+            <h4> Scatter plot of Sales versus Revenue</h4>
+            <div id="scatter_svr"></div>
+            <h4> Scatter plot of Expenses versus Revenue</h4>
+            <div id="scatter_evr"></div>
+            <h4> Scatter plot of Sales versus Expenses</h4>
+            <div id="scatter_sve"></div>
+            <div id="correlation-data"></div>
             <div id="testing"></div>
         </section>
-        <div>
-          <p id="log"></p>
-        </div>
     </main>
     <footer>
-        <p>&copy; 2023 Your Company</p>
+        <p>&copy; 2023 AlfredC & DonaldC</p>
     </footer>
     <script src="script.js"></script>
 </body>
