@@ -16,3 +16,13 @@ The standard format of the Excel file consists of 4 columns:
 * expenses
 
 The sample.xlsx can be found in the repository.
+
+## Examples
+* Line charts of sales, revenue and expenses
+![line Chart Example](ReadMeImage/lineChartExample.png)
+* Regression trendlines
+![Regression trendlines Example](ReadMeImage/linearRegressionExample.png)
+* Bar charts of sales, revenue and expenses
+![Bar Chart Example](ReadMeImage/barChartExample.png)
+* Scatter Plots
+![Scatter Plot Example](ReadMeImage/scatterChartExample.png)
