@@ -1,11 +1,4 @@
 // Utility functions
-const calculateMean = (data) => data.reduce((sum, value) => sum + value, 0) / data.length;
-
-const calculateCorrelation = (dataX, dataY) => {
-    // Calculate correlation between two datasets
-    // You can use a library like simple-statistics for statistical calculations
-};
-
 const parseExcelData = (excelData) => {
     // Parse the Excel data using a library like SheetJS
     // Return an object with parsed data (months, sales, revenue, expenses)
@@ -37,11 +30,9 @@ const parseExcelData = (excelData) => {
 
 
 // Higher-order function for creating line charts
-const createChart = (chartType, xlabel, datasetLabels, datasets) => {
+const createLineChart = (chartType, xlabel, datasetLabels, datasets) => {
     const chartsContainer = document.getElementById('charts');
     const canvas = document.createElement('canvas');
-    canvas.width = 400;
-    canvas.height = 300;
     chartsContainer.innerHTML = '';
     chartsContainer.appendChild(canvas);
     const ctx = canvas.getContext('2d');
@@ -96,8 +87,6 @@ const getRandomColor = () => {
 const createBarChart = (xLabels, datasetLabels, datasets) => {
     const chartsContainer = document.getElementById('bar_charts');
     const canvas = document.createElement('canvas');
-    canvas.width = 400;
-    canvas.height = 300;
     chartsContainer.innerHTML = '';
     chartsContainer.appendChild(canvas);
 
@@ -142,11 +131,9 @@ const createBarChart = (xLabels, datasetLabels, datasets) => {
 };
 
 // Higher-order function for creating scatter plots
-const createScatterPlot = (label, xData, yData,relation) => {
+const createScatterPlot = (xlabel, ylabel, xData, yData, relation) => {
     const chartsContainer = document.getElementById(relation);
     const canvas = document.createElement('canvas');
-    canvas.width = 400;
-    canvas.height = 300;
     chartsContainer.innerHTML = '';
     chartsContainer.appendChild(canvas);
 
@@ -154,7 +141,7 @@ const createScatterPlot = (label, xData, yData,relation) => {
 
     const chartData = {
         datasets: [{
-            label: label,
+            label: xlabel + ' vs ' + ylabel,
             data: xData.map((x, index) => ({ x: x, y: yData[index] })),
             backgroundColor: getRandomColor(),
             borderColor: 'rgba(0, 0, 0, 0.2)',
@@ -174,13 +161,13 @@ const createScatterPlot = (label, xData, yData,relation) => {
                 position: 'bottom',
                 title: {
                     display: true,
-                    text: 'Value'
+                    text: xlabel
                 }
             },
             y: {
                 title: {
                     display: true,
-                    text: 'Value'
+                    text: ylabel
                 }
             }
         }
@@ -193,17 +180,115 @@ const createScatterPlot = (label, xData, yData,relation) => {
     });
 };
 
+const createScatterRegressPlot = (xlabel, ylabel, xData, yData, relation) => {
+    const chartsContainer = document.getElementById(relation);
+    const canvas = document.createElement('canvas');
+    chartsContainer.innerHTML = '';
+    chartsContainer.appendChild(canvas);
+
+    const regressResult = timeRegressionAnalysis(xData, yData);
+
+    const ctx = canvas.getContext('2d');
+
+    const chartData = {
+        datasets: [{
+            label: `${ylabel} scatter plot`,
+            data: xData.map((x, index) => ({ x: index, y: yData[index] })),
+            backgroundColor: getRandomColor(),
+            borderColor: 'rgba(0, 0, 0, 0.2)',
+            borderWidth: 1,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            showLine: false
+        }, 
+        {
+            type: "line",
+            label: `${ylabel} linear regression`,
+            borderColor: getRandomColor(),
+            data: regressResult[2],
+            fill: false,
+            trendlineLinear: {
+                style: getRandomColor(),
+                lineStyle: "dashed",
+                width: 2,
+            }
+        }]
+    };
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: xlabel
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: ylabel
+                }
+            }
+        }
+    };
+
+    new Chart(ctx, {
+        type: 'scatter',
+        data: chartData,
+        options: chartOptions
+    });
+};
+
+const timeRegressionAnalysis = (tData, yData) => {
+    const numData = tData.length;
+    const xData = Array.from({length: tData.length}, (_, i) => i);
+    const xSum = xData.reduce((s, x) => s + x, 0);
+    // Turn each month into array of 0, 1, 2, 3 to normalize the value
+    const ySum = yData.reduce((s, x) => s + x, 0);
+    const xySum = xData.map((v, i) => v * yData[i]).reduce((s, x) => s + x, 0);
+    const xSqSum = xData.reduce((s, x) => Math.pow(x, 2) + s, 0);
+    const xSumSq = Math.pow(xSum, 2);
+
+    const slope = ( numData * xySum - xSum * ySum ) / ( numData * xSqSum - xSumSq );
+    const intercept = ( xSqSum * ySum - xSum * xySum ) / ( numData * xSqSum - xSumSq );
+
+    const result = Array.from(xData, (v) => {
+        return {x: v, y: slope*v + intercept}
+    });
+
+    return [slope, intercept, result];
+}
+
+const correlationAnalysis = (xData, yData) => {
+    const numData = xData.length;
+    const xSum = xData.reduce((s, x) => s + x, 0);
+    const ySum = yData.reduce((s, x) => s + x, 0);
+    const xySum = xData.map((v, i) => v * yData[i]).reduce((s, x) => s + x, 0);
+    const xSqSum = xData.reduce((s, x) => Math.pow(x, 2) + s, 0);
+    const ySqSum = yData.reduce((s, x) => Math.pow(x, 2) + s, 0);
+    const xSumSq = Math.pow(xSum, 2);
+    const ySumSq = Math.pow(ySum, 2)
+
+    const correlation = ( numData * xySum - xSum * ySum ) / Math.pow((( numData * xSqSum - xSumSq ) * ( numData * ySqSum - ySumSq )), 0.5);
+
+    return correlation;
+}
+
 
 // Event listener for input
 document.addEventListener('DOMContentLoaded', () => {
     const analyzeButton = document.getElementById('analyze-button');
     const fileInput = document.getElementById('file-input');
     const chartsContainer = document.getElementById('charts');
-    const correlationContainer = document.getElementById('correlation');
-    document.getElementById('log').innerHTML = '';
+    const correlationContainer = document.getElementById('correlation-data');
     
     analyzeButton.addEventListener('click', (event) => {
         event.preventDefault();
+        document.getElementById('analysis-section').removeAttribute('hidden');
         const file = fileInput.files[0];
         if (file) {
             const reader = new FileReader();
@@ -218,11 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const revenueData = parsedData.revenue;
                 const expensesData = parsedData.expenses;
 
-                // Perform statistical analysis
-                const salesMean = calculateMean(salesData);
-                const revenueMean = calculateMean(revenueData);
-                const expensesMean = calculateMean(expensesData);
-
                 // Display analysis results
                 chartsContainer.innerHTML = '';
                 correlationContainer.innerHTML = '';
@@ -236,15 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
 
                 // Create charts
-                createChart('line', months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
+                createLineChart('line', months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
+                createScatterRegressPlot('Time Unit', 'Sales', months, salesData, 'regress-chart-sales')
+                createScatterRegressPlot('Time Unit', 'Revenue', months, revenueData, 'regress-chart-revenue')
+                createScatterRegressPlot('Time Unit', 'Expenses', months, expensesData, 'regress-chart-expenses')
                 createBarChart(months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
-                createScatterPlot('Sales vs Revenue', parsedData.sales, parsedData.revenue,'scatter_charts_1');
-                createScatterPlot('Expenses vs Revenue', parsedData.expenses, parsedData.revenue,'scatter_charts_2');
-                createScatterPlot('Sales vs Expenses', parsedData.sales, parsedData.expenses,'scatter_charts_3');
-
-                // Perform and display correlation analysis
-                const correlationCoefficient = calculateCorrelation(salesData, revenueData);
-                correlationContainer.innerHTML = `Correlation Coefficient: ${correlationCoefficient.toFixed(2)}`;
+                createScatterPlot('Sales', 'Revenue', parsedData.sales, parsedData.revenue,'scatter_svr');
+                createScatterPlot('Expenses', 'Revenue', parsedData.expenses, parsedData.revenue,'scatter_evr');
+                createScatterPlot('Sales', 'Expenses', parsedData.sales, parsedData.expenses,'scatter_sve');
             };
 
             reader.readAsArrayBuffer(file);
