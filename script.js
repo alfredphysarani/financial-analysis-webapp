@@ -141,7 +141,7 @@ const createScatterPlot = (xlabel, ylabel, xData, yData, relation) => {
 
     const chartData = {
         datasets: [{
-            label: xlabel + ' vs ' + ylabel,
+            label: ylabel + ' vs ' + xlabel,
             data: xData.map((x, index) => ({ x: x, y: yData[index] })),
             backgroundColor: getRandomColor(),
             borderColor: 'rgba(0, 0, 0, 0.2)',
@@ -346,14 +346,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 createBarChart(months, ['Sales', 'Revenue', 'Expenses'], [salesData, revenueData, expensesData]);
 
                 // Create Scatter Plot
-                createScatterPlot('Sales', 'Revenue', salesData, revenueData,'scatter-svr');
-                document.getElementById('correlation-svr').innerHTML = `The correlation betweel Sales and Revenue: ${correlationAnalysis(salesData, revenueData)}`;
+                createScatterPlot('Sales', 'Revenue', salesData, revenueData,'scatter-rvs');
+                document.getElementById('correlation-rvs').innerHTML = `The correlation between Sales and Revenue: ${correlationAnalysis(salesData, revenueData)}`;
 
-                createScatterPlot('Expenses', 'Revenue', expensesData, revenueData,'scatter-evr');
-                document.getElementById('correlation-evr').innerHTML = `The correlation betweel Sales and Revenue: ${correlationAnalysis(expensesData, revenueData)}`;
+                createScatterPlot('Expenses', 'Revenue', expensesData, revenueData,'scatter-rve');
+                document.getElementById('correlation-rve').innerHTML = `The correlation between Expenses and Revenue: ${correlationAnalysis(expensesData, revenueData)}`;
 
-                createScatterPlot('Sales', 'Expenses', salesData, expensesData,'scatter-sve');
-                document.getElementById('correlation-sve').innerHTML = `The correlation betweel Sales and Revenue: ${correlationAnalysis(salesData, expensesData)}`;
+                createScatterPlot('Sales', 'Expenses', salesData, expensesData,'scatter-evs');
+                document.getElementById('correlation-evs').innerHTML = `The correlation between Sales and Expenses: ${correlationAnalysis(salesData, expensesData)}`;
             };
 
             reader.readAsArrayBuffer(file);
