@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Regression Analysis on Sales
                 createScatterRegressPlot('Time Unit', 'Sales', months, salesData, 'regress-chart-sales');
                 const regressSales = timeRegressionAnalysis(months, salesData);
-                document.getElementById('regress-result-sales').innerHTML += `The linear regression equation of sales: ${regressSales[0]}x + ${regressSales[1]}.`;
+                document.getElementById('regress-result-sales').innerHTML = `The linear regression equation of sales: ${regressSales[0]}x + ${regressSales[1]}.`;
                 document.getElementById('regress-result-sales').innerHTML += `<br\>The sales ${trendString(regressSales[0])}`;
                 
                 // Regression Analysis on Revenue
